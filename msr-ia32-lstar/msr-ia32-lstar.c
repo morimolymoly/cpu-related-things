@@ -29,7 +29,7 @@ static inline uint64_t exec_rdmsr(uint64_t msr)
 static int mymodule_init(void)
 {
 	uint64_t res = exec_rdmsr(MSR_IA32_LSTAR);
-	printk(KERN_ALERT "MSR_IA32_LSTAR: %PRIu64\n", res);
+	printk(KERN_ALERT "MSR_IA32_LSTAR: %llx\n", res);
 	return 0;
 }
 static void mymodule_exit(void)
