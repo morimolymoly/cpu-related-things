@@ -9,7 +9,6 @@ default:
 	$(MAKE) all
 
 all: $(OBJS) Makefile
-	gcc $(OBJS)
 
 %.o : %.c Makefile
 	gcc $*.c -o $*.o $(CFLAGS)
