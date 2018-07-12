@@ -11,7 +11,12 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 #include <stdio.h>
 #include <stdint.h>
 #include <inttypes.h>
+#include <linux/module.h>
 #include "msr.h"
+
+MODULE_LICENSE("MIT");
+MODULE_AUTHOR("Mizuho MORI <morimolymoly@gmail.com>");
+MODULE_DESCRIPTION("MSR_IA32_LSTAR RDMSR TEST KERNEL MODULE");
 
 static inline uint64_t rdmsr(uint64_t msr)
 {
@@ -24,9 +29,15 @@ static inline uint64_t rdmsr(uint64_t msr)
 	return ((uint64_t)high << 32) | low;
 }
 
-int main(void)
+static int mymodule_init(void)
 {
-    uint64_t res = rdmsr(MSR_IA32_LSTAR);
-    printf("MSR_IA32_LSTAR: %PRIu64\n", res);
-    return 0;
+	uint64_t res = rdmsr(MSR_IA32_LSTAR);
+	printk(KERN_ALERT "MSR_IA32_LSTAR: %PRIu64\n", res);
+	return 0;
 }
+static void mymodule_exit(void)
+{
+}
+
+module_init(mymodule_init);
+module_exit(mymodule_exit);

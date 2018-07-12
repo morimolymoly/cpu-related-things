@@ -1,6 +1,6 @@
 SOURCE = ./src
 INCLUDES = -I$(SOURCE)/include
-OBJS = $(SOURCE)/rdmsr.o
+OBJS = $(SOURCE)/msr-ia32-lstar.o
 
 CFLAGS = -O2 -Wall -Wextra $(INCLUDES)
 
