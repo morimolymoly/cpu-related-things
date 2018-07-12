@@ -8,9 +8,6 @@ The above copyright notice and this permission notice shall be included in all c
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-#include <stdio.h>
-#include <stdint.h>
-#include <inttypes.h>
 #include <linux/module.h>
 #include "msr.h"
 
@@ -18,7 +15,7 @@ MODULE_LICENSE("MIT");
 MODULE_AUTHOR("Mizuho MORI <morimolymoly@gmail.com>");
 MODULE_DESCRIPTION("MSR_IA32_LSTAR RDMSR TEST KERNEL MODULE");
 
-static inline uint64_t rdmsr(uint64_t msr)
+static inline uint64_t exec_rdmsr(uint64_t msr)
 {
 	uint32_t low, high;
 	asm volatile (
@@ -31,7 +28,7 @@ static inline uint64_t rdmsr(uint64_t msr)
 
 static int mymodule_init(void)
 {
-	uint64_t res = rdmsr(MSR_IA32_LSTAR);
+	uint64_t res = exec_rdmsr(MSR_IA32_LSTAR);
 	printk(KERN_ALERT "MSR_IA32_LSTAR: %PRIu64\n", res);
 	return 0;
 }
