@@ -14,19 +14,31 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 MODULE_LICENSE("MIT");
 MODULE_AUTHOR("Mizuho MORI <morimolymoly@gmail.com>");
 MODULE_DESCRIPTION("MSR_IA32_LSTAR RDMSR TEST KERNEL MODULE");
-
+static inline uint64_t exec_rdmsr(uint64_t msr)
+{
+	uint32_t low, high;
+	asm volatile (
+		"rdmsr"
+		: "=a"(low), "=d"(high)
+		: "c"(msr)
+	);
+	return ((uint64_t)high << 32) | low;
+}
 static inline void exec_wrmsr(uint64_t msr, uint64_t val)
 {
 	asm volatile (
 		"wrmsr"
 		: : "c"(msr),
-		"=A"(val) : "memory"
+		"A"(val)
 	);
 }
 
 static int mymodule_init(void)
 {
 	exec_wrmsr(MSR_IA32_LSTAR, 0xffffeb1111111111ULL);
+	printk(KERN_INFO "MOLY: OVERWRITE\n");
+	uint64_t res = exec_rdmsr(MSR_IA32_LSTAR);
+	printk(KERN_INFO "MOLY: MSR_IA32_LSTAR: %llx\n", res);
 	return 0;
 }
 static void mymodule_exit(void)
